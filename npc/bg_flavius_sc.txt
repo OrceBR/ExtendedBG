@@ -1,17 +1,20 @@
-/* (c) 2008 - 2012 eAmod Project; Andres Garbanzo  Zephyrus
+//===== rAthena Script =======================================
+//    Extended Battleground
+//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
+// Date:
+//  10-10-2019
+// By:
+//  Easycore         (Zephyrus, original author)
+//
+// Contact:
+//    - Facebook: https://www.facebook.com/EasycoreRo/
+//    - rAthena:  https://rathena.org/board/profile/16425-easycore/
+//    - Discord:  Easycore#3412
+//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
 
-  - gaiaro.staff@yahoo.com
-  - MSN andresjgm.cr@hotmail.com
-  - Skype Zephyrus_cr
-  - Site httpdev.terra-gaming.com
-
- This file is NOT public - you are not allowed to distribute it.
- Authorized Server List  httpdev.terra-gaming.comindex.phptopic72-authorized-eamod-servers
- eAmod is a non Free, extended version of eAthena Ragnarok Private Server.
-
- ==============================================================================
- BattleGround System - Flavius Stone Control
- ==============================================================================*/
+// ==============================================================================
+// BattleGround System - Flavius Stone Control
+// ==============================================================================*/
 
 -	script	Flavius_SC	-1,{
 	end;
@@ -26,7 +29,7 @@ OnGuillaumeDie:
 OnCroixDie:
 	if ($@BG_Status == 1 && getvariableofnpc(.BG_Arena$,"BG_Queue_Join") == "Flavius_SC" && set(.@Stone,callfunc("SC_StoneCheck",getcharid(0))) > 0) { // Stone Carrier
 		set .Stone[.@Stone],0;
-		getmapxy .@m$, .@x, .@y, 0;
+		getmapxy .@m$, .@x, .@y, BL_PC;
 		movenpc "Neutral Stone#" + .@Stone, .@x, .@y;
 		mapannounce "bat_b04","Neutral Stone Dropped by [ " + strcharinfo(0) + " ]",1,0xFFFFFF;
 		initnpctimer "Neutral Stone#" + .@Stone;
@@ -136,7 +139,7 @@ OnMatchEnd:
 
 OnFlash:
 	if ($@BG_Status == 1 && getvariableofnpc(.BG_Arena$,"BG_Queue_Join") == "Flavius_SC" && set(.@Stone,callfunc("SC_StoneCheck",getcharid(0))) > 0) {
-		getmapxy .@m$, .@x, .@y, 0;
+		getmapxy .@m$, .@x, .@y, BL_PC;
 		if (getcharid(4) == $@BG_Team1)
 			viewpointmap "bat_b04",1, .@x, .@y, .@Stone, 0x0000FF;
 		else if (getcharid(4) == $@BG_Team2)
@@ -182,7 +185,7 @@ OnTouch:
 	sc_end SC_CAMOUFLAGE;
 	sc_end SC__INVISIBILITY;
 
-	disable_items;
+	setpcblock(PCBLOCK_SKILL|PCBLOCK_USEITEM,true);
 
 	set getvariableofnpc(.Stone[.@Stone],"Flavius_SC"),getcharid(0);
 	addtimer 2000, "Flavius_SC::OnFlash";
@@ -196,7 +199,7 @@ OnBGStart:
 
 OnTimer2000:
 	initnpctimer;
-	getmapxy .@m$, .@x, .@y, 1;
+	getmapxy .@m$, .@x, .@y, BL_NPC;
 	viewpointmap "bat_b04",1, .@x, .@y, atoi(strnpcinfo(2)), 0xFFFFFF;
 	end;
 
@@ -234,7 +237,7 @@ OnTouch:
 		sc_end SC_CAMOUFLAGE;
 		sc_end SC__INVISIBILITY;
 
-		disable_items;
+		setpcblock(PCBLOCK_SKILL|PCBLOCK_USEITEM,true);
 
 		mapannounce "bat_b04","Croix Stone has been stolen by [ " + strcharinfo(0) + " ]",1,0x0000FF;
 
@@ -247,7 +250,7 @@ OnTouch:
 		set .Count, 0;
 		deltimer "Flavius_SC::OnFlash";
 
-		enable_items;
+		setpcblock(PCBLOCK_SKILL|PCBLOCK_USEITEM,false);
 
 		mapannounce "bat_b04","Croix Stone captured by [ " + strcharinfo(0) + " ]",1,0xFF0000;
 
@@ -258,7 +261,7 @@ OnTouch:
 
 OnTimer2000:
 	initnpctimer;
-	getmapxy .@m$, .@x, .@y, 1;
+	getmapxy .@m$, .@x, .@y, BL_NPC;
 	viewpointmap "bat_b04",1, .@x, .@y, .Point, 0xFF0000;
 	specialeffect 223;
 	if (set(.Count, .Count + 1) >= 5) {
@@ -292,7 +295,7 @@ OnTouch:
 		sc_end SC_CAMOUFLAGE;
 		sc_end SC__INVISIBILITY;
 
-		disable_items;
+		setpcblock(PCBLOCK_SKILL|PCBLOCK_USEITEM,true);
 
 		mapannounce "bat_b04","Croix Stone has been stolen by [ " + strcharinfo(0) + " ]",1,0x0000FF;
 
@@ -305,7 +308,7 @@ OnTouch:
 		set .Count, 0;
 		deltimer "Flavius_SC::OnFlash";
 
-		enable_items;
+		setpcblock(PCBLOCK_SKILL|PCBLOCK_USEITEM,false);
 
 		mapannounce "bat_b04","Croix Stone captured by [ " + strcharinfo(0) + " ]",1,0xFF0000;
 
@@ -316,7 +319,7 @@ OnTouch:
 
 OnTimer2000:
 	initnpctimer;
-	getmapxy .@m$, .@x, .@y, 1;
+	getmapxy .@m$, .@x, .@y, BL_NPC;
 	viewpointmap "bat_b04",1, .@x, .@y, .Point, 0xFF0000;
 	specialeffect 223;
 	if (set(.Count, .Count + 1) >= 5) {
@@ -350,7 +353,7 @@ OnTouch:
 		sc_end SC_CAMOUFLAGE;
 		sc_end SC__INVISIBILITY;
 
-		disable_items;
+		setpcblock(PCBLOCK_SKILL|PCBLOCK_USEITEM,true);
 
 		mapannounce "bat_b04","Croix Stone has been stolen by [ " + strcharinfo(0) + " ]",1,0x0000FF;
 
@@ -363,7 +366,7 @@ OnTouch:
 		set .Count, 0;
 		deltimer "Flavius_SC::OnFlash";
 
-		enable_items;
+		setpcblock(PCBLOCK_SKILL|PCBLOCK_USEITEM,false);
 
 		mapannounce "bat_b04","Croix Stone captured by [ " + strcharinfo(0) + " ]",1,0xFF0000;
 
@@ -374,7 +377,7 @@ OnTouch:
 
 OnTimer2000:
 	initnpctimer;
-	getmapxy .@m$, .@x, .@y, 1;
+	getmapxy .@m$, .@x, .@y, BL_NPC;
 	viewpointmap "bat_b04",1, .@x, .@y, .Point, 0xFF0000;
 	specialeffect 223;
 	if (set(.Count, .Count + 1) >= 5) {
@@ -408,7 +411,7 @@ OnTouch:
 		sc_end SC_CAMOUFLAGE;
 		sc_end SC__INVISIBILITY;
 
-		disable_items;
+		setpcblock(PCBLOCK_SKILL|PCBLOCK_USEITEM,true);
 
 		mapannounce "bat_b04","Croix Stone has been stolen by [ " + strcharinfo(0) + " ]",1,0x0000FF;
 
@@ -421,7 +424,7 @@ OnTouch:
 		set .Count, 0;
 		deltimer "Flavius_SC::OnFlash";
 
-		enable_items;
+		setpcblock(PCBLOCK_SKILL|PCBLOCK_USEITEM,false);
 
 		mapannounce "bat_b04","Croix Stone captured by [ " + strcharinfo(0) + " ]",1,0xFF0000;
 
@@ -432,7 +435,7 @@ OnTouch:
 
 OnTimer2000:
 	initnpctimer;
-	getmapxy .@m$, .@x, .@y, 1;
+	getmapxy .@m$, .@x, .@y, BL_NPC;
 	viewpointmap "bat_b04",1, .@x, .@y, .Point, 0xFF0000;
 	specialeffect 223;
 	if (set(.Count, .Count + 1) >= 5) {
@@ -466,7 +469,7 @@ OnTouch:
 		sc_end SC_CAMOUFLAGE;
 		sc_end SC__INVISIBILITY;
 
-		disable_items;
+		setpcblock(PCBLOCK_SKILL|PCBLOCK_USEITEM,true);
 
 		mapannounce "bat_b04","Croix Stone has been stolen by [ " + strcharinfo(0) + " ]",1,0x0000FF;
 
@@ -479,7 +482,7 @@ OnTouch:
 		set .Count, 0;
 		deltimer "Flavius_SC::OnFlash";
 
-		enable_items;
+		setpcblock(PCBLOCK_SKILL|PCBLOCK_USEITEM,false);
 
 		mapannounce "bat_b04","Croix Stone captured by [ " + strcharinfo(0) + " ]",1,0xFF0000;
 
@@ -490,7 +493,7 @@ OnTouch:
 
 OnTimer2000:
 	initnpctimer;
-	getmapxy .@m$, .@x, .@y, 1;
+	getmapxy .@m$, .@x, .@y, BL_NPC;
 	viewpointmap "bat_b04",1, .@x, .@y, .Point, 0xFF0000;
 	specialeffect 223;
 	if (set(.Count, .Count + 1) >= 5) {
@@ -524,7 +527,7 @@ OnTouch:
 		sc_end SC_CAMOUFLAGE;
 		sc_end SC__INVISIBILITY;
 
-		disable_items;
+		setpcblock(PCBLOCK_SKILL|PCBLOCK_USEITEM,true);
 
 		mapannounce "bat_b04","Croix Stone has been stolen by [ " + strcharinfo(0) + " ]",1,0x0000FF;
 
@@ -537,7 +540,7 @@ OnTouch:
 		set .Count, 0;
 		deltimer "Flavius_SC::OnFlash";
 
-		enable_items;
+		setpcblock(PCBLOCK_SKILL|PCBLOCK_USEITEM,false);
 
 		mapannounce "bat_b04","Croix Stone captured by [ " + strcharinfo(0) + " ]",1,0xFF0000;
 
@@ -548,7 +551,7 @@ OnTouch:
 
 OnTimer2000:
 	initnpctimer;
-	getmapxy .@m$, .@x, .@y, 1;
+	getmapxy .@m$, .@x, .@y, BL_NPC;
 	viewpointmap "bat_b04",1, .@x, .@y, .Point, 0xFF0000;
 	specialeffect 223;
 	if (set(.Count, .Count + 1) >= 5) {
@@ -585,7 +588,7 @@ OnTouch:
 		sc_end SC_CAMOUFLAGE;
 		sc_end SC__INVISIBILITY;
 
-		disable_items;
+		setpcblock(PCBLOCK_SKILL|PCBLOCK_USEITEM,true);
 
 		mapannounce "bat_b04","Guillaume Stone has been stolen by [ " + strcharinfo(0) + " ]",1,0xFF0000;
 
@@ -598,7 +601,7 @@ OnTouch:
 		set .Count, 0;
 		deltimer "Flavius_SC::OnFlash";
 
-		enable_items;
+		setpcblock(PCBLOCK_SKILL|PCBLOCK_USEITEM,false);
 
 		mapannounce "bat_b04","Guillaume Stone captured by [ " + strcharinfo(0) + " ]",1,0x0000FF;
 
@@ -609,7 +612,7 @@ OnTouch:
 
 OnTimer2000:
 	initnpctimer;
-	getmapxy .@m$, .@x, .@y, 1;
+	getmapxy .@m$, .@x, .@y, BL_NPC;
 	viewpointmap "bat_b04",1, .@x, .@y, .Point, 0x0000FF;
 	specialeffect 223;
 	if (set(.Count, .Count + 1) >= 5) {
@@ -643,7 +646,7 @@ OnTouch:
 		sc_end SC_CAMOUFLAGE;
 		sc_end SC__INVISIBILITY;
 
-		disable_items;
+		setpcblock(PCBLOCK_SKILL|PCBLOCK_USEITEM,true);
 
 		mapannounce "bat_b04","Guillaume Stone has been stolen by [ " + strcharinfo(0) + " ]",1,0xFF0000;
 
@@ -656,7 +659,7 @@ OnTouch:
 		set .Count, 0;
 		deltimer "Flavius_SC::OnFlash";
 
-		enable_items;
+		setpcblock(PCBLOCK_SKILL|PCBLOCK_USEITEM,false);
 
 		mapannounce "bat_b04","Guillaume Stone captured by [ " + strcharinfo(0) + " ]",1,0x0000FF;
 
@@ -667,7 +670,7 @@ OnTouch:
 
 OnTimer2000:
 	initnpctimer;
-	getmapxy .@m$, .@x, .@y, 1;
+	getmapxy .@m$, .@x, .@y, BL_NPC;
 	viewpointmap "bat_b04",1, .@x, .@y, .Point, 0x0000FF;
 	specialeffect 223;
 	if (set(.Count, .Count + 1) >= 5) {
@@ -701,7 +704,7 @@ OnTouch:
 		sc_end SC_CAMOUFLAGE;
 		sc_end SC__INVISIBILITY;
 
-		disable_items;
+		setpcblock(PCBLOCK_SKILL|PCBLOCK_USEITEM,true);
 
 		mapannounce "bat_b04","Guillaume Stone has been stolen by [ " + strcharinfo(0) + " ]",1,0xFF0000;
 
@@ -714,7 +717,7 @@ OnTouch:
 		set .Count, 0;
 		deltimer "Flavius_SC::OnFlash";
 
-		enable_items;
+		setpcblock(PCBLOCK_SKILL|PCBLOCK_USEITEM,false);
 
 		mapannounce "bat_b04","Guillaume Stone captured by [ " + strcharinfo(0) + " ]",1,0x0000FF;
 
@@ -725,7 +728,7 @@ OnTouch:
 
 OnTimer2000:
 	initnpctimer;
-	getmapxy .@m$, .@x, .@y, 1;
+	getmapxy .@m$, .@x, .@y, BL_NPC;
 	viewpointmap "bat_b04",1, .@x, .@y, .Point, 0x0000FF;
 	specialeffect 223;
 	if (set(.Count, .Count + 1) >= 5) {
@@ -759,7 +762,7 @@ OnTouch:
 		sc_end SC_CAMOUFLAGE;
 		sc_end SC__INVISIBILITY;
 
-		disable_items;
+		setpcblock(PCBLOCK_SKILL|PCBLOCK_USEITEM,true);
 
 		mapannounce "bat_b04","Guillaume Stone has been stolen by [ " + strcharinfo(0) + " ]",1,0xFF0000;
 
@@ -772,7 +775,7 @@ OnTouch:
 		set .Count, 0;
 		deltimer "Flavius_SC::OnFlash";
 
-		enable_items;
+		setpcblock(PCBLOCK_SKILL|PCBLOCK_USEITEM,false);
 
 		mapannounce "bat_b04","Guillaume Stone captured by [ " + strcharinfo(0) + " ]",1,0x0000FF;
 
@@ -783,7 +786,7 @@ OnTouch:
 
 OnTimer2000:
 	initnpctimer;
-	getmapxy .@m$, .@x, .@y, 1;
+	getmapxy .@m$, .@x, .@y, BL_NPC;
 	viewpointmap "bat_b04",1, .@x, .@y, .Point, 0x0000FF;
 	specialeffect 223;
 	if (set(.Count, .Count + 1) >= 5) {
@@ -817,7 +820,7 @@ OnTouch:
 		sc_end SC_CAMOUFLAGE;
 		sc_end SC__INVISIBILITY;
 
-		disable_items;
+		setpcblock(PCBLOCK_SKILL|PCBLOCK_USEITEM,true);
 
 		mapannounce "bat_b04","Guillaume Stone has been stolen by [ " + strcharinfo(0) + " ]",1,0xFF0000;
 
@@ -830,7 +833,7 @@ OnTouch:
 		set .Count, 0;
 		deltimer "Flavius_SC::OnFlash";
 
-		enable_items;
+		setpcblock(PCBLOCK_SKILL|PCBLOCK_USEITEM,false);
 
 		mapannounce "bat_b04","Guillaume Stone captured by [ " + strcharinfo(0) + " ]",1,0x0000FF;
 
@@ -841,7 +844,7 @@ OnTouch:
 
 OnTimer2000:
 	initnpctimer;
-	getmapxy .@m$, .@x, .@y, 1;
+	getmapxy .@m$, .@x, .@y, BL_NPC;
 	viewpointmap "bat_b04",1, .@x, .@y, .Point, 0x0000FF;
 	specialeffect 223;
 	if (set(.Count, .Count + 1) >= 5) {
@@ -875,7 +878,7 @@ OnTouch:
 		sc_end SC_CAMOUFLAGE;
 		sc_end SC__INVISIBILITY;
 
-		disable_items;
+		setpcblock(PCBLOCK_SKILL|PCBLOCK_USEITEM,true);
 
 		mapannounce "bat_b04","Guillaume Stone has been stolen by [ " + strcharinfo(0) + " ]",1,0xFF0000;
 
@@ -888,7 +891,7 @@ OnTouch:
 		set .Count, 0;
 		deltimer "Flavius_SC::OnFlash";
 
-		enable_items;
+		setpcblock(PCBLOCK_SKILL|PCBLOCK_USEITEM,false);
 
 		mapannounce "bat_b04","Guillaume Stone captured by [ " + strcharinfo(0) + " ]",1,0x0000FF;
 
@@ -899,7 +902,7 @@ OnTouch:
 
 OnTimer2000:
 	initnpctimer;
-	getmapxy .@m$, .@x, .@y, 1;
+	getmapxy .@m$, .@x, .@y, BL_NPC;
 	viewpointmap "bat_b04",1, .@x, .@y, .Point, 0x0000FF;
 	specialeffect 223;
 	if (set(.Count, .Count + 1) >= 5) {
@@ -1006,4 +1009,4 @@ bat_b04	mapflag	nowarpto
 bat_b04	mapflag	noreturn
 bat_b04	mapflag	nobranch
 bat_b04	mapflag	nopenalty
-bat_b04	mapflag	noemergencycall
+bat_b04	mapflag	noecall
